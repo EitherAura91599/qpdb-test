@@ -35,7 +35,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost) // Convert plain text to hash using bcrypt method
 	user := User{Email: input.Email, Username: input.Username, Password: string(hashedPassword)}
 
 	if err := DB.Create(&user).Error; err != nil {
@@ -64,7 +64,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil { // Check password hash with known encrypted value
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
